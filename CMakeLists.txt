@@ -128,6 +128,12 @@ if(NOT CPPUNIT_FOUND)
     message(FATAL_ERROR "CppUnit required to compile mapper")
 endif()
 
+# https://github.com/gr-vt/gr-mapper/pull/14/files
+find_package(Log4Cpp)
+if(NOT LOG4CPP_FOUND)
+    message(FATAL_ERROR "LOG4CPP NOT FOUND!")
+endif(NOT LOG4CPP_FOUND)
+
 ########################################################################
 # Setup the include and linker paths
 ########################################################################
@@ -177,6 +183,6 @@ add_subdirectory(docs)
 ########################################################################
 # Install cmake search helper for this library
 ########################################################################
-install(FILES cmake/Modules/mapperConfig.cmake        
+install(FILES cmake/Modules/mapperConfig.cmake
     DESTINATION lib${LIB_SUFFIX}/cmake/mapper
 )
