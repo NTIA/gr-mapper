@@ -9,7 +9,7 @@
   <param>
     <name>PRBS Sequence</name>
     <key>which_mode</key>
-    <value>"PRBS31"</value>
+    <value>"PRBS15"</value>
     <type>enum</type>
     <option>
       <name>PRBS7</name>
