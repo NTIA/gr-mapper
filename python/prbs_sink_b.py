@@ -2,6 +2,7 @@
 
 import numpy
 from gnuradio import gr
+import pmt
 import prbs_base
 
 
@@ -16,12 +17,25 @@ class prbs_sink_b(gr.sync_block):
 
     def work(self, input_items, output_items):
         inb = input_items[0]
-        gen = self.base.gen_n(len(inb))
+        linb = len(inb)
+        gen = self.base.gen_n(linb)
+
+        tags = self.get_tags_in_window(0, 0, linb, pmt.intern("rx_time"))
+
+        if tags:
+            tag = tags[-1]
+            rx_time = tag.value
+            seconds = pmt.to_uint64(pmt.tuple_ref(rx_time, 0))
+            fractional_seconds = pmt.to_double(pmt.tuple_ref(rx_time, 1))
+            timestamp = seconds + fractional_seconds
+            if self.nbits > 0:
+                print "NBits: %d \tNErrs: %d \tBER: %.4E, \ttimestamp %f"%(int(self.nbits), int(self.nerrs), self.nerrs/float(self.nbits), timestamp)
+                self.nerrs = 0
+                self.nbits = 0
+
         self.nerrs += numpy.sum(numpy.bitwise_xor(inb, gen))
         self.nbits += len(inb)
-
-        if self.nbits > 0:
-            print "NBits: %d \tNErrs: %d \tBER: %.4E"%(int(self.nbits), int(self.nerrs), self.nerrs/self.nbits)
-            #print "NBits: %d \tNErrs: %d \tBER: %g"%(int(self.nbits), int(self.nerrs), self.nerrs/self.nbits)
+        # if self.nbits > 0:
+        #     print "NBits: %d \tNErrs: %d \tBER: %.4E"%(int(self.nbits), int(self.nerrs), self.nerrs/self.nbits)
 
         return len(inb)

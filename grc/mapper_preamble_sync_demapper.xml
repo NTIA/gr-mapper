@@ -86,7 +86,7 @@
       Bits for Loose Trigger - # of bits that are wrong for this condition to be met (3 bits wrong)
       Width - # of bits in each block including the length of the preamble
       Preamble - Create a variable in grc that uses the built in Preamble_Gen function (see below)
-        
+
         pream_len = 84
         preamble = (mapper.preamble_generator(pream_len,511,1033)).get_preamble()
                                              (length,  seed, mask)
