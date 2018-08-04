@@ -813,7 +813,7 @@
     </param>
     <param>
       <key>which_mode</key>
-      <value>"PRBS23"</value>
+      <value>"PRBS15"</value>
     </param>
     <param>
       <key>reset_len</key>
@@ -3975,7 +3975,7 @@
     </param>
     <param>
       <key>dev_args</key>
-      <value></value>
+      <value>"serial=30AD2C7"</value>
     </param>
     <param>
       <key>_enabled</key>
