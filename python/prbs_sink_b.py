@@ -15,6 +15,9 @@ class prbs_sink_b(gr.sync_block):
         self.nbits = 0
         self.nerrs = 0
 
+        self.ber_port_id = pmt.intern("ber")
+        self.message_port_register_out(self.ber_port_id)
+
     def work(self, input_items, output_items):
         inb = input_items[0]
         linb = len(inb)
@@ -29,7 +32,12 @@ class prbs_sink_b(gr.sync_block):
             fractional_seconds = pmt.to_double(pmt.tuple_ref(rx_time, 1))
             timestamp = seconds + fractional_seconds
             if self.nbits > 0:
-                print "NBits: %d \tNErrs: %d \tBER: %.4E, \ttimestamp %f"%(int(self.nbits), int(self.nerrs), self.nerrs/float(self.nbits), timestamp)
+                ber = self.nerrs / float(self.nbits)
+                #print "NBits: %d \tNErrs: %d \tBER: %.4E, \ttimestamp %f"%(int(self.nbits), int(self.nerrs), ber, timestamp)
+                d = pmt.make_dict()
+                d = pmt.dict_add(d, pmt.intern('timestamp'), pmt.from_double(timestamp))
+                d = pmt.dict_add(d, pmt.intern('ber'), pmt.from_double(ber))
+                self.message_port_pub(self.ber_port_id, d)
                 self.nerrs = 0
                 self.nbits = 0
 

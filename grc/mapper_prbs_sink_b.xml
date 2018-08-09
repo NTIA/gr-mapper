@@ -40,4 +40,11 @@
     <name>in</name>
     <type>byte</type>
   </sink>
+
+  <source>
+    <name>ber</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+
 </block>
